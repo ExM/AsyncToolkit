@@ -1,1 +1,7 @@
 The set of tools for easy asynchronous calls.
+
+Features:
+* strongly typed asynchronous call to the delegate with the parameters
+* pause before calling the delegate (you can cancel out)
+* thread safe task queue. This is non-blocking version of the code `lock(...){...}'
+* asynchronous extension to read and write to the stream
