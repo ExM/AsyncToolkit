@@ -1,0 +1,95 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+using System;
+
+namespace System.Asynchrony
+{
+	
+	public class Task : ITask
+	{
+		private Action _action;
+		
+		public Task(Action action)
+		{
+			_action = action;
+		}
+
+		public void Run()
+		{
+			_action();
+		}
+
+		public void Run(object arg)
+		{
+			_action();
+		}
+
+		public static Task Create(Action action)
+		{
+			return new Task(action);
+		}
+<# for(int tc = 1; tc<=16; tc++) {
+ string[] names = new string[tc];
+ string[] types = new string[tc];
+ string[] Tx_argx = new string[tc];
+ string[] argx = new string[tc];
+ for(int i = 0; i<tc; i++)
+ {
+  names[i] = (i+1).ToString();
+  types[i] = "T" + names[i];
+  Tx_argx[i] = string.Format("T{0} arg{0}", names[i]);
+  argx[i] = string.Format("arg{0}", names[i]);
+ }
+#>
+		
+		public static Task<<#= string.Join(", ", types) #>> Create<<#= string.Join(", ", types) #>>(
+			Action<<#= string.Join(", ", types) #>> action,
+			<#= string.Join(", ", Tx_argx) #>)
+		{
+			return new Task<<#= string.Join(", ", types) #>>(action,
+				<#= string.Join(", ", argx) #>);
+		}
+<# } #>
+	}
+<# for(int tc = 1; tc<=16; tc++) {
+ string[] names = new string[tc];
+ string[] types = new string[tc];
+ string[] Tx_argx = new string[tc];
+ string[] _argx = new string[tc];
+ for(int i = 0; i<tc; i++)
+ {
+  names[i] = (i+1).ToString();
+  types[i] = "T" + names[i];
+  Tx_argx[i] = string.Format("T{0} arg{0}", names[i]);
+  _argx[i] = string.Format("_arg{0}", names[i]);
+ }
+#>
+		
+	public class Task<<#= string.Join(", ", types) #>> : ITask
+	{
+		private Action<<#= string.Join(", ", types) #>> _action;
+<# foreach(string n in names) { #>
+		private T<#= n #> _arg<#= n #>;
+<# } #>
+
+		public Task(Action<<#= string.Join(", ", types) #>> action,
+			<#= string.Join(", ", Tx_argx) #>)
+		{
+			_action = action;
+<# foreach(string n in names) { #>
+			_arg<#= n #> = arg<#= n #>;
+<# } #>
+		}
+
+		public void Run()
+		{
+			_action(<#= string.Join(", ", _argx) #>);
+		}
+
+		public void Run(object arg)
+		{
+			_action(<#= string.Join(", ", _argx) #>);
+		}
+	}
+<# } #>
+}

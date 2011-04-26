@@ -1,0 +1,35 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Threading;
+
+namespace System.Asynchrony
+{
+	
+	public static partial class Async
+	{
+<# for(int tc = 1; tc<=16; tc++) {
+ string[] names = new string[tc];
+ string[] types = new string[tc];
+ string[] Tx_argx = new string[tc];
+ string[] _argx = new string[tc];
+ for(int i = 0; i<tc; i++)
+ {
+  names[i] = (i+1).ToString();
+  types[i] = "T" + names[i];
+  Tx_argx[i] = string.Format("T{0} arg{0}", names[i]);
+  _argx[i] = string.Format("arg{0}", names[i]);
+ }
+#>
+		
+		public static void Invoke<<#= string.Join(", ", types) #>>(
+			Action<<#= string.Join(", ", types) #>> action,
+			<#= string.Join(", ", Tx_argx) #>)
+		{
+			if(action != null)
+				ThreadPool.QueueUserWorkItem(new Task<<#= string.Join(", ", types) #>>(
+					action, <#= string.Join(", ", _argx) #>).Run);
+		}
+<# } #>
+	}
+}

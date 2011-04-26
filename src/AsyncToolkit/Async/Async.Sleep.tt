@@ -1,0 +1,40 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Threading;
+
+namespace System.Asynchrony
+{
+	
+	public static partial class Async
+	{
+<# for(int tc = 1; tc<=15; tc++) {
+ string[] names = new string[tc];
+ string[] types = new string[tc];
+ string[] Tx_argx = new string[tc];
+ string[] _argx = new string[tc];
+ for(int i = 0; i<tc; i++)
+ {
+  names[i] = (i+1).ToString();
+  types[i] = "T" + names[i];
+  Tx_argx[i] = string.Format("T{0} arg{0}", names[i]);
+  _argx[i] = string.Format("arg{0}", names[i]);
+ }
+#>
+		
+		public static SleepSticker Sleep<<#= string.Join(", ", types) #>>(int timeout,
+			Action<bool, <#= string.Join(", ", types) #>> action,
+			<#= string.Join(", ", Tx_argx) #>)
+		{
+			ManualResetEvent wait = new ManualResetEvent(false);
+			RegisteredWaitHandle handle = null;
+			handle = ThreadPool.RegisterWaitForSingleObject(wait, (object state, bool timedOut) =>
+			{
+				handle.Unregister(wait);
+				action(timedOut, <#= string.Join(", ", _argx) #>);
+			}, null, timeout, true);
+			return new SleepSticker(wait);
+		}
+<# } #>
+	}
+}
