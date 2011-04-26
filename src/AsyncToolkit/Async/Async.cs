@@ -5,12 +5,12 @@ namespace System.Asynchrony
 {
 	public static partial class Async
 	{
-		public static void AsyncInvoke(Action action)
+		public static void Invoke(Action action)
 		{
 			ThreadPool.QueueUserWorkItem(new Task(action).Run);
 		}
 
-		public static SleepSticker AsyncSleep(int timeout, Action<bool> action)
+		public static SleepSticker Sleep(int timeout, Action<bool> action)
 		{
 			ManualResetEvent wait = new ManualResetEvent(false);
 			RegisteredWaitHandle handle = null;

@@ -1,5 +1,8 @@
 The set of tools for easy asynchronous calls.
 
+Source code:
+ git://github.com/ExM/AsyncToolkit.git
+
 Features:
 * strongly typed asynchronous call to the delegate with the parameters
 * pause before calling the delegate (you can cancel out)
