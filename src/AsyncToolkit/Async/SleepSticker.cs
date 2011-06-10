@@ -4,16 +4,16 @@ namespace System.Asynchrony
 {
 	public class SleepSticker
 	{
-		private readonly ManualResetEvent _wait;
+		internal readonly ManualResetEvent Wait;
 
 		public SleepSticker(ManualResetEvent wait)
 		{
-			_wait = wait;
+			Wait = wait;
 		}
 
 		public void Abort()
 		{
-			_wait.Set();
+			Wait.Set();
 		}
 	}
 }

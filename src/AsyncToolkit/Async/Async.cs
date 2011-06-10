@@ -10,6 +10,16 @@ namespace System.Asynchrony
 			ThreadPool.QueueUserWorkItem(new Task(action).Run);
 		}
 
+		public static void Sleep(SleepSticker ss, int timeout, Action<bool> action)
+		{
+			RegisteredWaitHandle handle = null;
+			handle = ThreadPool.RegisterWaitForSingleObject(ss.Wait, (object state, bool timedOut) =>
+			{
+				handle.Unregister(ss.Wait);
+				action(timedOut);
+			}, null, timeout, true);
+		}
+
 		public static SleepSticker Sleep(int timeout, Action<bool> action)
 		{
 			ManualResetEvent wait = new ManualResetEvent(false);
