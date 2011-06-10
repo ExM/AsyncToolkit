@@ -36,15 +36,28 @@ namespace System.IO
 
 		public static void AsyncRead(this Stream source, Action<string> completed, Action<Exception> excepted)
 		{
-			AsyncRead(source, Encoding.UTF8, completed, excepted);
+			new CopyStreamContext(
+				source,
+				1024,
+				(buff) => RExt.Convert(buff, Encoding.UTF8.GetString, completed, excepted),
+				excepted);
 		}
 
 		public static void AsyncRead(this Stream source, Encoding encode, Action<string> completed, Action<Exception> excepted)
 		{
 			new CopyStreamContext(
 				source,
-				0x1000,
-				(buff) => RxConvert<string>.Convert(buff, (b) => encode.GetString(b), completed, excepted),
+				1024,
+				(buff) => RExt.Convert(buff, encode.GetString, completed, excepted),
+				excepted);
+		}
+
+		public static void AsyncRead(this Stream source, int partLenght, Action<string> completed, Action<Exception> excepted)
+		{
+			new CopyStreamContext(
+				source,
+				partLenght,
+				(buff) => RExt.Convert(buff, Encoding.UTF8.GetString, completed, excepted),
 				excepted);
 		}
 

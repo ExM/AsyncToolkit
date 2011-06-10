@@ -1,9 +1,9 @@
 ﻿
 namespace System.Asynchrony
 {
-	public static class RxConvert<Tout>
+	public static class RExt
 	{
-		public static void Convert<T1>(T1 arg1, Func<T1, Tout> converter, Action<Tout> completed, Action<Exception> excepted)
+		public static void Convert<T1, Tout>(T1 arg1, Func<T1, Tout> converter, Action<Tout> completed, Action<Exception> excepted)
 		{
 			Tout result;
 			try
@@ -18,7 +18,7 @@ namespace System.Asynchrony
 			completed(result);
 		}
 
-		public static void Convert<T1, T2>(T1 arg1, T2 arg2, Func<T1, T2, Tout> converter, Action<Tout> completed, Action<Exception> excepted)
+		public static void Convert<T1, T2, Tout>(T1 arg1, T2 arg2, Func<T1, T2, Tout> converter, Action<Tout> completed, Action<Exception> excepted)
 		{
 			Tout result;
 			try
