@@ -41,6 +41,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="RxConvert.cs" />
     <Compile Include="Queue\QueueAction.Add.cs">
       <DependentUpon>QueueAction.Add.tt</DependentUpon>
       <AutoGen>True</AutoGen>
